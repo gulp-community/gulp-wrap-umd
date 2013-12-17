@@ -1,0 +1,30 @@
+{
+  "name": "gulp-wrap-umd",
+  "version": "0.1.0",
+  "description": "Wrap files with an AMD wrapper",
+  "keywords": [
+    "gulpplugin",
+    "umd",
+    "wrap"
+  ],
+  "repository": "https://github.com/phated/gulp-wrap-umd.git",
+  "author": "Blaine Bublitz <blaine@iceddev.com>",
+  "dependencies": {
+    "event-stream": "~3.0.15",
+    "gulp-util": "~2.1.2",
+    "lodash": "~2.4.1"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.8"
+  },
+  "scripts": {
+    "test": "tap ./test/*.js",
+    "compile": "lodash template=./templates/*.jst exports=node -o template.js -d"
+  },
+  "devDependencies": {
+    "tap": "~0.4.6",
+    "lodash-cli": "~2.4.1",
+    "gulp": "~3.1.4"
+  }
+}

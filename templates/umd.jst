@@ -1,0 +1,18 @@
+<% var cjsDeps = _.map(deps, function(dep){ return "require('" + dep + "')"; }); %>
+<% var globalDeps = _.map(deps, function(dep){ return "root." + dep; }); %>
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(<%= deps ? JSON.stringify(deps) + ', ' : '' %>factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(<%= (cjsDeps.length ? cjsDeps : ['require', 'exports', 'module']).join(',') %>);
+  } else {
+    root.<%= namespace %> = factory(<%= (globalDeps || []).join(',') %>);
+  }
+}(this, function(<%= (!deps ? ['require', 'exports', 'module'] : params || '').toString() %>) {
+<% if(exports){ %>
+<%= contents %>
+return <%= exports %>;
+<% } else { %>
+return <%= contents %>;
+<% } %>
+}));
