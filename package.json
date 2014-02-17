@@ -1,6 +1,6 @@
 {
   "name": "gulp-wrap-umd",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wrap files with an UMD wrapper",
   "keywords": [
     "gulpplugin",
