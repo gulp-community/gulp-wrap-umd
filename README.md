@@ -33,16 +33,41 @@ gulp.task('umd', function(){
 #### options.deps
 
 Type: `Array`
-Default: `['require', 'exports', 'module']`
+Default: `['require', 'exports', 'module']` (depends on template, implemented in default `umd` template)
 
 The dependencies to import or require.
 
-#### options.params
+Starting from 0.2.0, you can use extended `deps` syntax for setting custom names/paths for different targets and parameter names right in `deps` items like below:
+```javascript
+[
+    {name: 'jquery', globalName: 'jQuery', paramName: '$' /* , cjsName: ..., amdName: ... */},
+    'jade',
+    {name: 'lodash', globalName: '_', amdName: '../lodash'}
+]
+```
+...so you would get:
+```javascript
+(function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(["jquery", "jade", "../lodash"], factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory(require('jquery'), require('jade'), require('lodash'));
+    } else {
+        root.test = factory(root.jQuery, root.jade, root._);
+    }
+}(this, function($, jade, _) {
+    // ...
+}));
+```
+
+#### options.params (deprecated)
 
 Type: `Array`
 Default: `['require', 'exports', 'module']`
 
 The parameter names to assign your dependencies to in the factory function.
+
+When set, is used as `paramName` values from `deps` where missing (left for backward compatibility).
 
 #### options.exports
 
@@ -57,6 +82,13 @@ Type: `String`
 Default: `gulpWrapUmd`
 
 The namespace in which the file contents will be assigned. Use dot notation (e.g. App.Templates) for nested namespaces.
+
+#### options.template
+
+Type: `String`
+Default: `umd`
+
+Name of template from built-in `templates` folder or filename of custom Lo-Dash template.
 
 ## LICENSE
 

@@ -23,6 +23,7 @@ function expectStream(t, options){
   });
   return es.map(function(file){
     options.contents = fs.readFileSync(file.path, 'utf-8');
+    fs.writeFileSync(path.join(__dirname, 'results', t.conf.name + '.js'), file.contents, 'utf-8');
     var expected = _.template(jst, options);
     t.equals(expected, String(file.contents));
   });
@@ -59,8 +60,7 @@ test('should wrap a function in UMD wrapper with single custom dep and param', f
       namespace: 'test'
     }))
     .pipe(expectStream(t, {
-      deps: ['jade'],
-      params: ['jade'],
+      deps: [{name: 'jade', amdName: 'jade', cjsName: 'jade', globalName: 'jade', paramName: 'jade'}],
       namespace: 'test'
     }));
 });
@@ -75,8 +75,33 @@ test('should wrap a function in UMD wrapper with multiple custom deps and params
       namespace: 'test'
     }))
     .pipe(expectStream(t, {
-      deps: ['jade', 'lodash'],
-      params: ['jade', 'lodash'],
+      deps: [
+        {name: 'jade', amdName: 'jade', cjsName: 'jade', globalName: 'jade', paramName: 'jade'},
+        {name: 'lodash', amdName: 'lodash', cjsName: 'lodash', globalName: 'lodash', paramName: 'lodash'}
+      ],
+      namespace: 'test'
+    }));
+});
+
+test('should wrap a function in UMD wrapper using extended deps syntax', function(t){
+  t.plan(1);
+
+  gulp.src(filename)
+    .pipe(task({
+      deps: [
+        {name: 'jquery', globalName: 'jQuery'},
+        'jade',
+        {name: 'lodash', globalName: '_', amdName: '../lodash'}
+      ],
+      params: ['$', 'jade', '_'],
+      namespace: 'test'
+    }))
+    .pipe(expectStream(t, {
+      deps: [
+        {name: 'jquery', amdName: 'jquery', cjsName: 'jquery', globalName: 'jQuery', paramName: '$'},
+        {name: 'jade', amdName: 'jade', cjsName: 'jade', globalName: 'jade', paramName: 'jade'},
+        {name: 'lodash', amdName: '../lodash', cjsName: 'lodash', globalName: '_', paramName: '_'}
+      ],
       namespace: 'test'
     }));
 });
@@ -90,7 +115,7 @@ test('should wrap a function in UMD wrapper with custom deps', function(t){
       namespace: 'test'
     }))
     .pipe(expectStream(t, {
-      deps: ['domReady'],
+      deps: [{name: 'domReady', amdName: 'domReady', cjsName: 'domReady', globalName: 'domReady', paramName: 'domReady'}],
       namespace: 'test'
     }));
 });
@@ -118,7 +143,7 @@ test('should isolate the contents of the individual files', function(t){
       namespace: 'test'
     }))
     .pipe(expectStream(t, {
-      deps: ['test'],
+      deps: [{name: 'test', amdName: 'test', cjsName: 'test', globalName: 'test', paramName: 'test'}],
       namespace: 'test'
     }));
 });

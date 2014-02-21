@@ -1,15 +1,21 @@
-<% var cjsDeps = _.map(deps, function(dep){ return "require('" + dep + "')"; }); %>
-<% var globalDeps = _.map(deps, function(dep){ return "root." + dep; }); %>
+<%
+var stdDeps = ['require', 'exports', 'module'];
+
+var amdDeps = _.map(deps, 'amdName');
+var globalDeps = _.map(deps, function(dep) { return 'root.' + dep.globalName });
+var cjsDeps = deps ? deps.map(function(dep) { return "require('" + dep.cjsName + "')" }) : stdDeps;
+var depNames = deps ? _.map(deps, 'paramName') : stdDeps;
+%>
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(<%= deps ? JSON.stringify(deps) + ', ' : '' %>factory);
+    define(<%= deps ? JSON.stringify(amdDeps) + ', ' : '' %>factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(<%= (cjsDeps.length ? cjsDeps : ['require', 'exports', 'module']).join(',') %>);
+    module.exports = factory(<%= cjsDeps.join(', ') %>);
   } else {
-    root.<%= namespace %> = factory(<%= (globalDeps || []).join(',') %>);
+    root.<%= namespace %> = factory(<%= globalDeps.join(', ') %>);
   }
-}(this, function(<%= (!deps ? ['require', 'exports', 'module'] : params || '').toString() %>) {
-<% if(exports){ %>
+}(this, function(<%= depNames.join(', ') %>) {
+<% if (exports) { %>
 <%= contents %>
 return <%= exports %>;
 <% } else { %>
