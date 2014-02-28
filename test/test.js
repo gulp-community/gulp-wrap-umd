@@ -4,7 +4,7 @@ var test = require('tap').test;
 
 var gulp = require('gulp');
 var task = require('../');
-var es = require('event-stream');
+var through = require('through2');
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
@@ -21,11 +21,11 @@ function expectStream(t, options){
     namespace: 'test',
     contents: null
   });
-  return es.map(function(file){
+  return through.obj(function(file, enc, cb){
     options.contents = fs.readFileSync(file.path, 'utf-8');
-    fs.writeFileSync(path.join(__dirname, 'results', t.conf.name + '.js'), file.contents, 'utf-8');
     var expected = _.template(jst, options);
     t.equals(expected, String(file.contents));
+    cb();
   });
 }
 
@@ -145,5 +145,35 @@ test('should isolate the contents of the individual files', function(t){
     .pipe(expectStream(t, {
       deps: [{name: 'test', amdName: 'test', cjsName: 'test', globalName: 'test', paramName: 'test'}],
       namespace: 'test'
+    }));
+});
+
+test('should use a custom template', function(t){
+  var tmpl = '<%= contents %>';
+
+  function expectStream(t, options){
+    options = _.defaults(options || {}, {
+      deps: null,
+      params: null,
+      exports: null,
+      namespace: 'test',
+      contents: null
+    });
+    return through.obj(function(file, enc, cb){
+      options.contents = fs.readFileSync(file.path, 'utf-8');
+      var expected = _.template(tmpl, options);
+      t.equals(expected, String(file.contents));
+      cb();
+    });
+  }
+
+  t.plan(2);
+
+  gulp.src(path.join(__dirname, './fixtures/test-*.js'))
+    .pipe(task({
+      template: tmpl
+    }))
+    .pipe(expectStream(t, {
+      template: tmpl
     }));
 });
