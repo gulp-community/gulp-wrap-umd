@@ -61,6 +61,18 @@ Starting from 0.2.0, you can use extended `deps` syntax for setting custom names
 }));
 ```
 
+##### extended deps configuration
+
+```js
+{
+  name: '' // default name for any properties that aren't set
+  globalName: '', // global namespace to attach to
+  paramName: '', // parameter name for the wrapper function
+  amdName: ''; // module name for the AMD dependency
+  cjsName: ''; // module name for the CJS dependency
+}
+```
+
 #### options.params (deprecated)
 
 Type: `Array`
