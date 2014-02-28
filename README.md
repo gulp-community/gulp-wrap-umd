@@ -33,7 +33,7 @@ gulp.task('umd', function(){
 #### options.deps
 
 Type: `Array`
-Default: `['require', 'exports', 'module']` (depends on template, implemented in default `umd` template)
+Default: `['require', 'exports', 'module']` (depends on template, implemented in default template)
 
 The dependencies to import or require.
 
@@ -86,15 +86,15 @@ The namespace in which the file contents will be assigned. Use dot notation (e.g
 #### options.template
 
 Type: `String`
-Default: `umd`
+Default: The UMD template
 
-Name of template from built-in `templates` folder or filename of custom Lo-Dash template.
+The template to use to generate the output files. Can be passed a Lo-Dash template string as a custom template.
 
 ## LICENSE
 
 MIT License
 
-Copyright (c) 2013 Blaine Bublitz
+Copyright (c) 2014 Blaine Bublitz
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
