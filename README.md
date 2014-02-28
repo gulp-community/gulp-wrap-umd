@@ -33,6 +33,7 @@ gulp.task('umd', function(){
 #### options.deps
 
 Type: `Array`
+
 Default: `['require', 'exports', 'module']` (depends on template, implemented in default template)
 
 The dependencies to import or require.
@@ -63,6 +64,7 @@ Starting from 0.2.0, you can use extended `deps` syntax for setting custom names
 #### options.params (deprecated)
 
 Type: `Array`
+
 Default: `['require', 'exports', 'module']`
 
 The parameter names to assign your dependencies to in the factory function.
@@ -72,13 +74,15 @@ When set, is used as `paramName` values from `deps` where missing (left for back
 #### options.exports
 
 Type: `String`
+
 Default: `null`
 
-The variable to return (export) from your factory function.  This can be used in situations where you need to return and defined namespace.
+The variable to return (export) from your factory function.  This can be used in situations where you need to return a defined namespace.
 
 #### options.namespace
 
 Type: `String`
+
 Default: `gulpWrapUmd`
 
 The namespace in which the file contents will be assigned. Use dot notation (e.g. App.Templates) for nested namespaces.
@@ -86,6 +90,7 @@ The namespace in which the file contents will be assigned. Use dot notation (e.g
 #### options.template
 
 Type: `String`
+
 Default: The UMD template
 
 The template to use to generate the output files. Can be passed a Lo-Dash template string as a custom template.
