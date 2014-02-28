@@ -9,7 +9,7 @@ var tmpls = require('./template');
 function normalizeDeps(deps, params){
   return _.map(deps, function(dep, idx){
     function paramName(){
-      return params ? params[idx] : dep;
+      return params ? params[idx] : (dep.name || dep);
     }
 
     var out = {};
