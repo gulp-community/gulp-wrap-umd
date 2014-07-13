@@ -11,7 +11,7 @@
   "author": "Blaine Bublitz <blaine@iceddev.com>",
   "dependencies": {
     "lodash": "~2.4.1",
-    "through2": "^0.4.1",
+    "through2": "^0.5.1",
     "gulp-util": "^2.2.14"
   },
   "main": "index.js",
@@ -25,6 +25,6 @@
   "devDependencies": {
     "tap": "~0.4.6",
     "lodash-cli": "~2.4.1",
-    "gulp": "~3.5.2"
+    "gulp": "~3.8.6"
   }
 }
