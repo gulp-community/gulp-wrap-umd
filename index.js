@@ -36,6 +36,7 @@ function getOptions(file, opts){
     deps: null,
     params: null,
     exports: null,
+    globalExportTemplate: '<%= _default %>',
     namespace: 'gulpWrapUmd',
     file: file
   });
@@ -54,8 +55,17 @@ module.exports = function(options){
     tmpl = _.template(options.template);
   }
 
+  var globalExportDefaultTmpl = "<% var globalDeps = _.map(deps, function(dep) { return 'root.' + dep.globalName; }); %>" +
+                                "root.<%= namespace %> = factory(<%= globalDeps.join(', ') %>);";
+
   function compile(contents, opts) {
+    var globalExportTmplOpts = _.extend((_.clone(opts) || {}), {
+      _default: _.template(globalExportDefaultTmpl)(_.clone(opts) || {})
+    });
+    opts.globalExportTemplate = _.template(opts.globalExportTemplate)(globalExportTmplOpts);
+
     opts.contents = contents;
+
     return tmpl(opts);
   }
 

@@ -2,7 +2,6 @@
 var stdDeps = ['require', 'exports', 'module'];
 
 var amdDeps = _.pluck(deps, 'amdName');
-var globalDeps = _.map(deps, function(dep) { return 'root.' + dep.globalName });
 var cjsDeps = deps ? _.map(deps, function(dep) { return "require('" + dep.cjsName + "')" }) : stdDeps;
 var depNames = deps ? _.pluck(deps, 'paramName') : stdDeps;
 %>
@@ -12,7 +11,7 @@ var depNames = deps ? _.pluck(deps, 'paramName') : stdDeps;
   } else if (typeof exports === 'object') {
     module.exports = factory(<%= cjsDeps.join(', ') %>);
   } else {
-    root.<%= namespace %> = factory(<%= globalDeps.join(', ') %>);
+    <%= globalExportTemplate %>
   }
 }(this, function(<%= depNames.join(', ') %>) {
 <% if (exports) { %>

@@ -99,6 +99,14 @@ Default: `gulpWrapUmd`
 
 The namespace in which the file contents will be assigned. Use dot notation (e.g. App.Templates) for nested namespaces.
 
+#### options.globalExportTemplate
+
+Type: `String`
+
+Default: The UMD global export template
+
+The template used to generate the code for setting up global export. Can be passed as a Lo-Dash template string as a custom template. An extra option named `_default` can be used in the template to insert the default code that would normally be used. (I.E. `<%= _default %>`)
+
 #### options.template
 
 Type: `String`
