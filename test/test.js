@@ -19,9 +19,15 @@ function expectStream(t, options){
     params: null,
     exports: null,
     namespace: 'test',
+    globalExportTemplate: '<%= _default %>',
     contents: null
   });
   return through.obj(function(file, enc, cb){
+    var globalExportTmplOpts = _.extend(_.clone(options), {
+      _default: "root." + options.namespace + " = factory(" + _.map(options.deps, function(dep) { return 'root.' + dep.globalName; }).join(', ') + ");"
+    });
+    options.globalExportTemplate = _.template(options.globalExportTemplate)(globalExportTmplOpts);
+
     options.contents = fs.readFileSync(file.path, 'utf-8');
     var expected = _.template(jst, options);
     t.equals(expected, String(file.contents));
@@ -144,6 +150,22 @@ test('should isolate the contents of the individual files', function(t){
     }))
     .pipe(expectStream(t, {
       deps: [{name: 'test', amdName: 'test', cjsName: 'test', globalName: 'test', paramName: 'test'}],
+      namespace: 'test'
+    }));
+});
+
+test('should wrap a function in UMD wrapper with custom global export template', function(t){
+  var tmpl = "// A global export template!\n<%= namespace %> = null;";
+
+  t.plan(1);
+
+  gulp.src(filename)
+    .pipe(task({
+      globalExportTemplate: tmpl,
+      namespace: 'test'
+    }))
+    .pipe(expectStream(t, {
+      globalExportTemplate: tmpl,
       namespace: 'test'
     }));
 });
