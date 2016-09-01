@@ -43,20 +43,21 @@ Starting from 0.2.0, you can use extended `deps` syntax for setting custom names
 [
     {name: 'jquery', globalName: 'jQuery', paramName: '$' /* , cjsName: ..., amdName: ... */},
     'jade',
-    {name: 'lodash', globalName: '_', amdName: '../lodash'}
+    {name: 'lodash', globalName: '_', amdName: '../lodash'},
+    {name: 'angular-cookies', globalName: "'ngCookies'", globalNameString: true, paramName: 'ngCookies'}
 ]
 ```
 ...so you would get:
 ```javascript
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(["jquery", "jade", "../lodash"], factory);
+        define(["jquery", "jade", "../lodash", "angular-cookies"], factory);
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('jquery'), require('jade'), require('lodash'));
+        module.exports = factory(require('jquery'), require('jade'), require('lodash'), require('angular-cookies'));
     } else {
-        root.test = factory(root.jQuery, root.jade, root._);
+        root.test = factory(root.jQuery, root.jade, root._, 'ngCookies');
     }
-}(this, function($, jade, _) {
+}(this, function($, jade, _, ngCookies) {
     // ...
 }));
 ```
@@ -67,6 +68,7 @@ Starting from 0.2.0, you can use extended `deps` syntax for setting custom names
 {
   name: '' // default name for any properties that aren't set
   globalName: '', // global namespace to attach to
+  globalNameString: false, // True set globalName string format
   paramName: '', // parameter name for the wrapper function
   amdName: ''; // module name for the AMD dependency
   cjsName: ''; // module name for the CJS dependency
