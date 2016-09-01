@@ -91,16 +91,18 @@ test('should wrap a function in UMD wrapper using extended deps syntax', functio
       deps: [
         {name: 'jquery', globalName: 'jQuery'},
         'jade',
-        {name: 'lodash', globalName: '_', amdName: '../lodash'}
+        {name: 'lodash', globalName: '_', amdName: '../lodash'},
+        {name: 'angular-cookies', globalName: '"ngCookies"', globalNameString: true}
       ],
-      params: ['$', 'jade', '_'],
+      params: ['$', 'jade', '_', 'ngCookies'],
       namespace: 'test'
     }))
     .pipe(expectStream(t, {
       deps: [
         {name: 'jquery', amdName: 'jquery', cjsName: 'jquery', globalName: 'jQuery', paramName: '$'},
         {name: 'jade', amdName: 'jade', cjsName: 'jade', globalName: 'jade', paramName: 'jade'},
-        {name: 'lodash', amdName: '../lodash', cjsName: 'lodash', globalName: '_', paramName: '_'}
+        {name: 'lodash', amdName: '../lodash', cjsName: 'lodash', globalName: '_', paramName: '_'},
+        {name: 'angular-cookies', amdName: 'angular-cookies', cjsName: 'angular-cookies', globalName: '"ngCookies"', globalNameString: true, paramName: 'ngCookies'}
       ],
       namespace: 'test'
     }));

@@ -16,12 +16,14 @@ function normalizeDeps(deps, params){
     if(typeof dep === 'string'){
       out.name = dep;
       out.globalName = dep;
+      out.globalNameString = false;
       out.paramName = paramName();
       out.amdName = dep;
       out.cjsName = dep;
     } else {
       out.name = dep.name;
       out.globalName = dep.globalName || dep.name;
+      out.globalNameString = dep.globalNameString || false;
       out.paramName = dep.paramName || paramName();
       out.amdName = dep.amdName || dep.name;
       out.cjsName = dep.cjsName || dep.name;
